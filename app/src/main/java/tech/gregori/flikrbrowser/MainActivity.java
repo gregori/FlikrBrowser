@@ -2,11 +2,14 @@ package tech.gregori.flikrbrowser;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements GetFlickrJsonData.OnDataAvailable {
@@ -14,6 +17,7 @@ public class MainActivity extends AppCompatActivity implements GetFlickrJsonData
     private static final String BASE_URL = "https://api.flickr.com/services/feeds/photos_public.gne";
     private static final String LANG = "pt-br";
     private static final boolean MATCH_ALL = true;
+    private FlickrRecyclerViewAdapter mFlickrRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +26,12 @@ public class MainActivity extends AppCompatActivity implements GetFlickrJsonData
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mFlickrRecyclerViewAdapter = new FlickrRecyclerViewAdapter(this, new ArrayList<Photo>());
+        recyclerView.setAdapter(mFlickrRecyclerViewAdapter);
 
         Log.d(TAG, "onCreate: Terminou");
     }
@@ -74,11 +84,14 @@ public class MainActivity extends AppCompatActivity implements GetFlickrJsonData
      */
     @Override
     public void onDataAvailable(List<Photo> data, DownloadStatus status) {
+        Log.d(TAG, "onDataAvailable: iniciou");
         if (status == DownloadStatus.OK) {
-            Log.d(TAG, "onDataAvailable: data é " + data);
+            mFlickrRecyclerViewAdapter.loadNewData(data);
         } else {
             // houve falha no processo do download
             Log.e(TAG, "onDataAvailable: falhou com status " + status);
         }
+
+        Log.d(TAG, "onDataAvailable: terminou");
     }
 }

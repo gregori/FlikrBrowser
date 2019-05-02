@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**
@@ -45,9 +47,25 @@ class FlickrRecyclerViewAdapter extends RecyclerView.Adapter<FlickrRecyclerViewA
         return new FlickrImageViewHolder(view);
     }
 
+    /**
+     * Chamado pelo layout manager quando quer inserir novcs dados em uma linha existente
+     * @param flickrImageViewHolder o viewHolder em questão
+     * @param position o índice da linha
+     */
     @Override
     public void onBindViewHolder(@NonNull FlickrImageViewHolder flickrImageViewHolder, int position) {
+        Photo photoItem = mPhotoList.get(position);
+        Log.d(TAG, "onBindViewHolder: " + photoItem.getTitle() + " --> " + position);
 
+        // picasso baixará a imagem pelo link e a aplicará no imageView (thumbnail)
+        // esta classe é um singleton, só há uma instância. Ela também baixa
+        // as imagens em background. Além disso, faz cache das imagens.
+        Picasso.with(mContext).load(photoItem.getImage())
+                .error(R.drawable.placeholder) // se houver um erro, põe o placeholder no lugar da imagem
+                .placeholder(R.drawable.placeholder) // enquanto baixa a imagem, mostra o placeholder
+                .into(flickrImageViewHolder.thumbnail);
+
+        flickrImageViewHolder.title.setText(photoItem.getTitle());
     }
 
     /**

@@ -7,8 +7,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity implements GetRawData.OnDownloadComplete {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements GetFlickrJsonData.OnDataAvailable {
     private static final String TAG = "MainActivity";
+    private static final String BASE_URL = "https://api.flickr.com/services/feeds/photos_public.gne";
+    private static final String LANG = "pt-br";
+    private static final boolean MATCH_ALL = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,10 +23,22 @@ public class MainActivity extends AppCompatActivity implements GetRawData.OnDown
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        GetRawData getRawData = new GetRawData(this);
-        getRawData.execute("https://api.flickr.com/services/feeds/photos_public.gne?tags-android,nougat,sdk&tagmode=any&format=json&lang=pt-br&nojsoncallback=1");
-
         Log.d(TAG, "onCreate: Terminou");
+    }
+
+    /**
+     * Fazemos o download do JSON em onResume
+     * pois com a troca de Activities geralmente este
+     * método será chamado, e não onCreate
+     */
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume: começou");
+        super.onResume();
+        GetFlickrJsonData getFlickrJsonData = new GetFlickrJsonData(this, BASE_URL, LANG, MATCH_ALL);
+        //getFlickrJsonData.executeOnSameThread("android, nougat");
+        getFlickrJsonData.execute("android, nougat");
+        Log.d(TAG, "onResume: terminou");
     }
 
     @Override
@@ -56,11 +73,12 @@ public class MainActivity extends AppCompatActivity implements GetRawData.OnDown
      * @param status O status do download
      */
     @Override
-    public void onDownloadComplete(String data, DownloadStatus status) {
+    public void onDataAvailable(List<Photo> data, DownloadStatus status) {
         if (status == DownloadStatus.OK) {
-            Log.d(TAG, "onDownloadComplete: data é " + data);
+            Log.d(TAG, "onDataAvailable: data é " + data);
         } else {
-            Log.e(TAG, "onDownloadComplete: falhou com status " + status);
+            // houve falha no processo do download
+            Log.e(TAG, "onDataAvailable: falhou com status " + status);
         }
     }
 }

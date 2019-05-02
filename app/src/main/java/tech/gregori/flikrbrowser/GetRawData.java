@@ -105,9 +105,21 @@ class GetRawData extends AsyncTask<String, Void, String> {
         return null;
     }
 
+    /**
+     * Este método faz com que o download não seja executado como uma tarefa em paralelo
+     * @param s URL para download
+     */
+    void runInSameThread(String s) {
+        Log.d(TAG, "runInSameThread: começou");
+
+        onPostExecute(doInBackground(s));
+
+        Log.d(TAG, "runInSameThread: terminou");
+    }
+
     @Override
     protected void onPostExecute(String s) {
-        Log.d(TAG, "onPostExecute: parametro = " + s);
+        Log.d(TAG, "onPostExecute: começou");
 
         if (mCallback != null) {
             mCallback.onDownloadComplete(s, mDownloadStatus); // se temos um callback, chamamos

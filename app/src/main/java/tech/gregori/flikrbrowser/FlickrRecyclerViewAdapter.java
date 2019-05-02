@@ -4,7 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +26,58 @@ class FlickrRecyclerViewAdapter extends RecyclerView.Adapter<FlickrRecyclerViewA
     public FlickrRecyclerViewAdapter(Context context, List<Photo> photoList) {
         mContext = context;
         mPhotoList = photoList;
+    }
+
+    /**
+     * Chamado pelo LayoutManager quando uma nova view, dentro da lista, é necessária
+     * @param parent a referência à view que chamou este método. No caso o RecyclerView
+     * @param viewType a posição em que a View estará. No nosso caso será também a posição do arrayList
+     * @return
+     */
+    @NonNull
+    @Override
+    public FlickrImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d(TAG, "onCreateViewHolder: nova view requisitada");
+
+        // Vamos "inflar" a view para podermos utilizá-la e passamos por parâmetro para o viewHolder
+        // o ViewHolder buscará os campos do leiaute e permitirá que o utilizemos nesta classe;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.browse, parent, false);
+        return new FlickrImageViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull FlickrImageViewHolder flickrImageViewHolder, int position) {
+
+    }
+
+    /**
+     * @return o tamanho da lista.
+     */
+    @Override
+    public int getItemCount() {
+        Log.d(TAG, "getItemCount: foi chamado");
+        // se temos uma lista e seu tamanho é maior que zero, retornamos o tamanho,
+        // senão, retornamos 0
+        return ((mPhotoList != null) && (mPhotoList.size() != 0) ? mPhotoList.size() : 0);
+    }
+
+    /**
+     * Carrega uma lista de fotos.
+     * @param newPhotos Lista de fotos a ser inserida nesta classe
+     */
+    void loadNewData(List<Photo> newPhotos) {
+        mPhotoList = newPhotos;
+        notifyDataSetChanged(); // Notificamos à RecyclerView que atualizamos os dados
+                                // e que a view deve ser redesenhada
+    }
+
+    /**
+     * Retorna uma foto que será exibida no PhotoDetailsActivity
+     * @param position Posição da foto a retornar
+     * @return a foto da posição desejada.
+     */
+    public Photo getPhoto(int position) {
+        return ((mPhotoList != null) && (mPhotoList.size() != 0) ? mPhotoList.get(position) : null);
     }
 
     /**

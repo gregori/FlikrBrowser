@@ -37,7 +37,7 @@ class GetRawData extends AsyncTask<String, Void, String> {
     }
 
 
-    public GetRawData(OnDownloadComplete callback) {
+    GetRawData(OnDownloadComplete callback) {
         mDownloadStatus = DownloadStatus.IDLE; // Inicializamos com IDLE pois no momento a classe
                                                // não está fazendo nada (idle = ocioso)
         mCallback = callback;
@@ -109,6 +109,7 @@ class GetRawData extends AsyncTask<String, Void, String> {
      * Este método faz com que o download não seja executado como uma tarefa em paralelo
      * @param s URL para download
      */
+    @SuppressWarnings("unused")
     void runInSameThread(String s) {
         Log.d(TAG, "runInSameThread: começou");
 

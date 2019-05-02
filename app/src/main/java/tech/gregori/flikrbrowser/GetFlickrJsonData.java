@@ -36,7 +36,7 @@ class GetFlickrJsonData extends AsyncTask<String, Void, List<Photo>> implements 
         void onDataAvailable(List<Photo> data, DownloadStatus status);
     }
 
-    public GetFlickrJsonData(OnDataAvailable callback, String baseURL, String language, boolean matchAll) {
+    GetFlickrJsonData(OnDataAvailable callback, String baseURL, String language, boolean matchAll) {
         Log.d(TAG, "GetFlickrJsonData: chamada!");
         mCallback = callback;
         mBaseURL = baseURL;
@@ -73,6 +73,7 @@ class GetFlickrJsonData extends AsyncTask<String, Void, List<Photo>> implements 
      * Executa uma busca na mesma thread
      * @param searchCriteria critério para a busca
      */
+    @SuppressWarnings("unused")
     void executeOnSameThread(String searchCriteria) {
         Log.d(TAG, "executeOnSameThread: inicia");
         mRunningOnSameThread = true;  // com este método, não estamos em threads separadas

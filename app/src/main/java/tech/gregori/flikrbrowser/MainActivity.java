@@ -8,11 +8,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements GetFlickrJsonData.OnDataAvailable {
+public class MainActivity extends AppCompatActivity implements GetFlickrJsonData.OnDataAvailable,
+        RecyclerItemClickListener.OnRecyclerClickListener {
     private static final String TAG = "MainActivity";
     private static final String BASE_URL = "https://api.flickr.com/services/feeds/photos_public.gne";
     private static final String LANG = "pt-br";
@@ -29,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements GetFlickrJsonData
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, recyclerView, this));
 
         mFlickrRecyclerViewAdapter = new FlickrRecyclerViewAdapter(this, new ArrayList<Photo>());
         recyclerView.setAdapter(mFlickrRecyclerViewAdapter);
@@ -93,5 +98,17 @@ public class MainActivity extends AppCompatActivity implements GetFlickrJsonData
         }
 
         Log.d(TAG, "onDataAvailable: terminou");
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.d(TAG, "onItemClick: começou");
+        Toast.makeText(this, "Tap normal na posição " + position, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+        Log.d(TAG, "onItemLongClick: começou");
+        Toast.makeText(this, "Clique longo na posição " + position, Toast.LENGTH_SHORT).show();
     }
 }

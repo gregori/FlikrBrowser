@@ -73,7 +73,6 @@ class FlickrRecyclerViewAdapter extends RecyclerView.Adapter<FlickrRecyclerViewA
      */
     @Override
     public int getItemCount() {
-        Log.d(TAG, "getItemCount: foi chamado");
         // se temos uma lista e seu tamanho é maior que zero, retornamos o tamanho,
         // senão, retornamos 0
         return ((mPhotoList != null) && (mPhotoList.size() != 0) ? mPhotoList.size() : 0);

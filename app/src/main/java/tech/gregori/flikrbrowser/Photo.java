@@ -1,6 +1,12 @@
 package tech.gregori.flikrbrowser;
 
-class Photo {
+import java.io.Serializable;
+
+class Photo implements Serializable {
+
+    // geramos um UID para garantir, para diferentes VMs java, de que essa classe é a mesma
+    private static final long serialVersionUID = 1L;
+
     private String mTitle;
     private String mAuthor;
     private String mAuthorId;

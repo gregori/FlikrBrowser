@@ -39,7 +39,7 @@ class GetRawData extends AsyncTask<String, Void, String> {
 
     GetRawData(OnDownloadComplete callback) {
         mDownloadStatus = DownloadStatus.IDLE; // Inicializamos com IDLE pois no momento a classe
-                                               // não está fazendo nada (idle = ocioso)
+        // não está fazendo nada (idle = ocioso)
         mCallback = callback;
     }
 

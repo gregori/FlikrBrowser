@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements GetFlickrJsonData
         super.onResume();
         GetFlickrJsonData getFlickrJsonData = new GetFlickrJsonData(this, BASE_URL, LANG, MATCH_ALL);
         //getFlickrJsonData.executeOnSameThread("android, nougat");
-        getFlickrJsonData.execute("android, nougat");
+        getFlickrJsonData.execute("hearthstone, game");
         Log.d(TAG, "onResume: terminou");
     }
 
